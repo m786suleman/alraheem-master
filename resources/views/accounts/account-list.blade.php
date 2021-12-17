@@ -215,11 +215,22 @@
                                             </div>
                                             <div class="form-group col-lg-2">
                                               <label for="type">Add</label>
-                                              <a class="btn form-control" onclick="addItem()"><i class="fa fa-plus"></i></a>
+                                              <a class="btn form-control add_field_button"><i class="fa fa-plus"></i></a>
                                             </div>
                                           </div>
                                           <div class="col-lg-12 ">
-
+                                              <table class="table table-bordered" id="table1">
+                                                  <tr>
+                                                      <th>Product</th>
+                                                      <th>Price</th>
+                                                      <th>Action</th>
+                                                  </tr>
+                                                  <tr>
+{{--                                                      <td><input type="text" name="product[]" class="form-control" placeholder="Product"></td>--}}
+{{--                                                      <td><input type="number" name="productPrice[]" class="form-control" placeholder="Price" required></td>--}}
+{{--                                                      <td></td>--}}
+                                                  </tr>
+                                              </table>
                                           </div>
 
                                         </div>
@@ -338,27 +349,33 @@
 {{-- Save and print model end --}}
 
     <script>
-        function addItem(){
-            var d ,prod , price ;
-            prod = document.getElementById('product');
-            price = document.getElementById('productPrice');
+
+        $(document).ready(function(){
 
 
-            $.ajax({
-                type: 'POST',
-                url: '/saveCustomerProd/' ,
-                success: function (response, data) {
-                    if (response) {
-                        thix.find('.grade').empty();
-                        thix.find('.grade').append('<option value="0">Select</option>');
-                        $.each(response, function (key, value) {
-                            thix.find('.grade').append('<option value="' + value.grade_id + '">' + value.grade_name + '</option>');
-                        });
-                    }
+
+            // Table 1
+            var max_fields      = 20;
+            var add_button      = $(".add_field_button");
+            var x = 1; //initlal text box count
+            $(add_button).click(function(e){
+                e.preventDefault();
+                if(x < max_fields){
+                    x++;
+                    $('#table1').append('<tr id="row'+x+'"><td>   <input type="text" class="form-control" name="product[]" placeholder="product"/> </td> <td><input type="text" class="form-control" name="productPrice[]" placeholder="Price"/></td><td><button id="'+x+'" class="btn btn-danger remove_field">Remove</a></td></tr>'); //add input box
                 }
             });
 
-        }
+            $(document).on("click",".remove_field", function(e){ //user click on remove text
+                e.preventDefault();
+                var button_id = $(this).attr("id");
+                $('#row'+button_id+'').remove();
+                x--;
+            })
+        });
+
+
+
     </script>
     <!-- jquery
 		============================================ -->
